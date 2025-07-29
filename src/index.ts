@@ -62,8 +62,6 @@ function swapSuiForWal(amount: number) {
 
     const [base, quote, deep] = transaction.add(
         swapExactQuoteForBase({
-            // MVR has set latest to a version that isn't active yet, so we need to overwrite it here
-            package: '0x9592ac923593f37f4fed15ee15f760ebd4c39729f53ee3e8c214de7a17157769',
             typeArguments: [WAL, SUI],
             arguments: {
                 self: WAL_SUI_POOL.address,
@@ -75,7 +73,7 @@ function swapSuiForWal(amount: number) {
                     target: '0x2::coin::zero',
                     typeArguments: [DEEP],
                 }),
-                minBaseOut: 1_000_000_000, // ?
+                minBaseOut: 0,
             },
         })
     )
