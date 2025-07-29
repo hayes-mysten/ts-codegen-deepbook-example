@@ -4,17 +4,18 @@ import { normalizeStructTag } from "@mysten/sui/utils";
 import { coinWithBalance, Transaction } from "@mysten/sui/transactions";
 import {  swapExactQuoteForBase } from "./contracts/deepbook/pool";
 
-const WAL = '0x9ef7676a9f81937a52ae4b2af8d511a28a0b080477c0c2db40b0ab8882240d76::wal::WAL'
-const DEEP = '0x36dbef866a1d62bf7328989a10fb2f07d769f4ee587c0de4a0a256e57e0a58a8::deep::DEEP'
+const TESTNET_WAL = '0x9ef7676a9f81937a52ae4b2af8d511a28a0b080477c0c2db40b0ab8882240d76::wal::WAL'
+const TESTNET_DEEP = '0x36dbef866a1d62bf7328989a10fb2f07d769f4ee587c0de4a0a256e57e0a58a8::deep::DEEP'
 const SUI = normalizeStructTag('0x2::sui::SUI')
 
 const WAL_SUI_POOL = {
     address: `0x8c1c1b186c4fddab1ebd53e0895a36c1d1b3b9a77cd34e607bef49a38af0150a`,
-    baseCoin: WAL,
+    baseCoin: TESTNET_WAL,
     quoteCoin: SUI,
 }
 
 // 0xb697f10305f28115baf498eb8b22c1c6f8f13968749f6c4c2a9fc31defbab70a
+// This keypair is only used in this example, and only has testnet sui from this faucet and is safe to share
 const keypair = Ed25519Keypair.fromSecretKey('suiprivkey1qpawczmv8qjp6l8qctal249vsmn97pyamjjam9tff3snkkx9rax8w8tt4x3')
 
 const address = keypair.toSuiAddress()
@@ -62,7 +63,7 @@ function swapSuiForWal(amount: number) {
 
     const [base, quote, deep] = transaction.add(
         swapExactQuoteForBase({
-            typeArguments: [WAL, SUI],
+            typeArguments: [TESTNET_WAL, SUI],
             arguments: {
                 self: WAL_SUI_POOL.address,
                 quoteIn: coinWithBalance({
@@ -71,7 +72,7 @@ function swapSuiForWal(amount: number) {
                 }),
                 deepIn: transaction.moveCall({
                     target: '0x2::coin::zero',
-                    typeArguments: [DEEP],
+                    typeArguments: [TESTNET_DEEP],
                 }),
                 minBaseOut: 0,
             },
